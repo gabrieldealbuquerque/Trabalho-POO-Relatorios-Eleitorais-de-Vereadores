@@ -7,6 +7,9 @@
 #include <vector>
 #include <ctime>
 
+using namespace std;
+
+
 class Relatorios {
 public:
     void GeraRelatorio1();
@@ -23,8 +26,8 @@ public:
     
     // Functors de comparação
     struct CandidatoComparator {
-        std::tm dataEleicao;
-        CandidatoComparator(const std::tm &dt) : dataEleicao(dt) {}
+        tm dataEleicao;
+        CandidatoComparator(const tm &dt) : dataEleicao(dt) {}
         bool operator()(Candidato* c1, Candidato* c2) const;
     };
     

@@ -4,8 +4,10 @@
 #include <cstdlib>
 #include <cstring>
 
+using namespace std;
+
 Eleicao::Eleicao() : municipio(0), vagas(0) {
-    std::memset(&dataEleicao, 0, sizeof(dataEleicao));
+    memset(&dataEleicao, 0, sizeof(dataEleicao));
 }
 
 Eleicao& Eleicao::instance() {
@@ -16,11 +18,11 @@ Eleicao& Eleicao::instance() {
 int Eleicao::getMunicipio() const { return municipio; }
 void Eleicao::setMunicipio(int m) { municipio = m; }
 int Eleicao::getVagas() const { return vagas; }
-std::tm Eleicao::getDataEleicao() const { return dataEleicao; }
-void Eleicao::setDataEleicao(const std::tm &dt) { dataEleicao = dt; }
+tm Eleicao::getDataEleicao() const { return dataEleicao; }
+void Eleicao::setDataEleicao(const tm &dt) { dataEleicao = dt; }
 
-const std::map<int, Candidato*>& Eleicao::getCandidatos() const { return candidatos; }
-const std::set<Partido*>& Eleicao::getPartidos() const { return partidos; }
+const map<int, Candidato*>& Eleicao::getCandidatos() const { return candidatos; }
+const set<Partido*>& Eleicao::getPartidos() const { return partidos; }
 
 void Eleicao::aumentaVagas(Candidato* candidato) {
     if (candidato->ehEleito() && candidato->getSG_UE() == municipio) {
@@ -47,7 +49,7 @@ void Eleicao::criaCandidato(Candidato* novoCandidato) {
         criaPartido(p);
     }
     if (candidatoValido(novoCandidato, *this)) {
-        int num = std::stoi(novoCandidato->getNR_CANDIDATO());
+        int num = stoi(novoCandidato->getNR_CANDIDATO());
         candidatos[num] = novoCandidato;
         p->insereCandidato(novoCandidato);
     }
@@ -64,7 +66,7 @@ void Eleicao::processaVoto(int numeroCandidato, int votos) {
         if (it != candidatos.end())
             it->second->increaseVotos(votos);
         else
-            std::cerr << "Candidato não encontrado: " << numeroCandidato << std::endl;
+            cerr << "Candidato não encontrado: " << numeroCandidato << endl;
     }
 }
 
@@ -82,10 +84,10 @@ Partido* Eleicao::getPartidoPorNumero(int num) {
 }
 
 void Eleicao::imprimeCandidatos() const {
-    std::cout << "Candidatos:" << std::endl;
+    cout << "Candidatos:" << endl;
     for (auto &pair : candidatos) {
         Candidato* c = pair.second;
         if (c->getSG_UE() == municipio)
-            std::cout << c->toString() << std::endl;
+            cout << c->toString() << endl;
     }
 }

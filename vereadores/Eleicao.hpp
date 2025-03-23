@@ -7,13 +7,15 @@
 #include <set>
 #include <ctime>
 
+using namespace std;
+
 class Eleicao {
 private:
     int municipio;
     int vagas;
-    std::tm dataEleicao;
-    std::map<int, Candidato*> candidatos; // chave: número do candidato
-    std::set<Partido*> partidos;
+    tm dataEleicao;
+    map<int, Candidato*> candidatos; // chave: número do candidato
+    set<Partido*> partidos;
     
     // Construtor privado para implementação do singleton
     Eleicao();
@@ -27,10 +29,10 @@ public:
     void setMunicipio(int m);
     int getVagas() const;
     void aumentaVagas(Candidato* candidato);
-    std::tm getDataEleicao() const;
-    void setDataEleicao(const std::tm &dt);
-    const std::map<int, Candidato*>& getCandidatos() const;
-    const std::set<Partido*>& getPartidos() const;
+    tm getDataEleicao() const;
+    void setDataEleicao(const tm &dt);
+    const map<int, Candidato*>& getCandidatos() const;
+    const set<Partido*>& getPartidos() const;
     
     void criaCandidato(Candidato* novoCandidato);
     void criaPartido(Partido* novoPartido);

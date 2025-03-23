@@ -5,18 +5,20 @@
 #include <string>
 #include <set>
 
+using namespace std;
+
 class Partido {
 private:
-    std::string sigla;
+    string sigla;
     int numero;
-    std::set<Candidato*> candidatos;
+    set<Candidato*> candidatos;
     int votosLegenda;
 public:
-    Partido(const std::string &sigla, int numero);
-    const std::set<Candidato*>& getCandidatos() const;
+    Partido(const string &sigla, int numero);
+    const set<Candidato*>& getCandidatos() const;
     void insereCandidato(Candidato* candidato);
     int getNumero() const;
-    const std::string& getSigla() const;
+    const string& getSigla() const;
     int getVotosLegenda() const;
     void aumentaVotoLegenda(int votos);
 };

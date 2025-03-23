@@ -5,6 +5,8 @@
 #include <ctime>
 #include <cstring>
 
+using namespace std;
+
 // Construtor: inicializa os atributos padrão
 // A ordem aqui segue exatamente a ordem de declaração no header
 Candidato::Candidato()
@@ -21,17 +23,17 @@ Candidato::Candidato()
       votos(0)
 {
     // Se preferir garantir que a data esteja zerada:
-    std::memset(&DT_NASCIMENTO, 0, sizeof(DT_NASCIMENTO));
+    memset(&DT_NASCIMENTO, 0, sizeof(DT_NASCIMENTO));
 }
 
 int Candidato::getSG_UE() const { return SG_UE; }
 int Candidato::getCD_CARGO() const { return CD_CARGO; }
-const std::string& Candidato::getNR_CANDIDATO() const { return NR_CANDIDATO; }
-const std::string& Candidato::getNM_URNA_CANDIDATO() const { return NM_URNA_CANDIDATO; }
+const string& Candidato::getNR_CANDIDATO() const { return NR_CANDIDATO; }
+const string& Candidato::getNM_URNA_CANDIDATO() const { return NM_URNA_CANDIDATO; }
 int Candidato::getNR_PARTIDO() const { return NR_PARTIDO; }
-const std::string& Candidato::getSG_PARTIDO() const { return SG_PARTIDO; }
+const string& Candidato::getSG_PARTIDO() const { return SG_PARTIDO; }
 int Candidato::getNR_FEDERACAO() const { return NR_FEDERACAO; }
-std::tm Candidato::getDT_NASCIMENTO() const { return DT_NASCIMENTO; }
+tm Candidato::getDT_NASCIMENTO() const { return DT_NASCIMENTO; }
 bool Candidato::getCD_GENERO() const { return CD_GENERO; }
 CD_SIT_TOT_TURNO Candidato::getSituacaoTurno() const { return situacaoTurno; }
 int Candidato::getVotos() const { return votos; }
@@ -40,35 +42,35 @@ void Candidato::increaseVotos(int v) {
     votos += v;
 }
 
-// Função auxiliar para converter string para std::tm (formato dd/MM/yyyy)
-static std::tm parseDate(const std::string &dateStr) {
-    std::tm tm = {};
-    std::istringstream ss(dateStr);
-    ss >> std::get_time(&tm, "%d/%m/%Y");
+// Função auxiliar para converter string para tm (formato dd/MM/yyyy)
+static tm parseDate(const string &dateStr) {
+    tm tm = {};
+    istringstream ss(dateStr);
+    ss >> get_time(&tm, "%d/%m/%Y");
     if (ss.fail()) {
-        throw std::runtime_error("Falha ao converter data: " + dateStr);
+        throw runtime_error("Falha ao converter data: " + dateStr);
     }
     return tm;
 }
 
-void Candidato::setAtributo(const std::string &campo, const std::string &valor) {
+void Candidato::setAtributo(const string &campo, const string &valor) {
     if (valor.empty())
         return;
     try {
         if (campo == "SG_UE")
-            SG_UE = std::stoi(valor);
+            SG_UE = stoi(valor);
         else if (campo == "CD_CARGO")
-            CD_CARGO = std::stoi(valor);
+            CD_CARGO = stoi(valor);
         else if (campo == "NR_CANDIDATO")
             NR_CANDIDATO = valor;
         else if (campo == "NM_URNA_CANDIDATO")
             NM_URNA_CANDIDATO = valor;
         else if (campo == "NR_PARTIDO")
-            NR_PARTIDO = std::stoi(valor);
+            NR_PARTIDO = stoi(valor);
         else if (campo == "SG_PARTIDO")
             SG_PARTIDO = valor;
         else if (campo == "NR_FEDERACAO")
-            NR_FEDERACAO = std::stoi(valor);
+            NR_FEDERACAO = stoi(valor);
         else if (campo == "DT_NASCIMENTO")
             DT_NASCIMENTO = parseDate(valor);
         else if (campo == "CD_GENERO")
@@ -82,9 +84,9 @@ void Candidato::setAtributo(const std::string &campo, const std::string &valor) 
                 situacaoTurno = CD_SIT_TOT_TURNO::NAO_ELEITO;
         }
         else
-            throw std::invalid_argument("Coluna desconhecida: " + campo);
-    } catch (const std::exception &e) {
-        throw std::invalid_argument("Erro ao processar o campo " + campo + " com valor " + valor + ": " + e.what());
+            throw invalid_argument("Coluna desconhecida: " + campo);
+    } catch (const exception &e) {
+        throw invalid_argument("Erro ao processar o campo " + campo + " com valor " + valor + ": " + e.what());
     }
 }
 
@@ -100,8 +102,8 @@ bool Candidato::candidaturaInvalida() const {
     return situacaoTurno == CD_SIT_TOT_TURNO::INVALIDO;
 }
 
-std::string Candidato::toString() const {
-    std::ostringstream oss;
+string Candidato::toString() const {
+    ostringstream oss;
     // Se NR_FEDERACAO != -1, prefixa com '*'
     if (NR_FEDERACAO != -1)
         oss << "*";
