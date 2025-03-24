@@ -42,7 +42,7 @@ $(EXECUTAVEL): $(OBJETOS)
 
 # comandos para execução	
 run: $(EXECUTAVEL)
-	@./$(EXECUTAVEL) $(CDMUN) candidatos.csv votacao.csv 06/10/2024
+	@valgrind ./$(EXECUTAVEL) $(CDMUN) candidatos.csv votacao.csv 06/10/2024
 
 # comando para limpeza
 clean: 

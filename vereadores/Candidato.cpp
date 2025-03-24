@@ -42,18 +42,18 @@ int Candidato::getVotos() const { return votos; }
 void Candidato::increaseVotos(int v) {
     votos += v;
 }
-
-// Função auxiliar para converter string para tm (formato dd/MM/yyyy)
-static tm parseDate(const string &dateStr) {
-    tm tm = {};
-    istringstream ss(dateStr);
-    ss >> get_time(&tm, "%d/%m/%Y");
-    if (ss.fail()) {
-        throw runtime_error("Falha ao converter data: " + dateStr);
-    }
-    return tm;
-}
-
+//
+//// Função auxiliar para converter string para tm (formato dd/MM/yyyy)
+//static tm parseDate(const string &dateStr) {
+//    tm tm = {};
+//    istringstream ss(dateStr);
+//    ss >> get_time(&tm, "%d/%m/%Y");
+//    if (ss.fail()) {
+//        throw runtime_error("Falha ao converter data: " + dateStr);
+//    }
+//    return tm;
+//}
+//
 void Candidato::setAtributo(const string &campo, const string &valor) {
     if (valor.empty() || all_of(valor.begin(), valor.end(), [](char c) { return isspace(c); })) {
         return; // Ignora valores nulos ou vazios

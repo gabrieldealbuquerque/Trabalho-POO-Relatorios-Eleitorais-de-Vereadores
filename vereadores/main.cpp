@@ -78,6 +78,7 @@ void processarArquivoConsulta(const string &filename) {
     while (getline(file, linha)) {
         if (linha.find_first_not_of(" \t\n\r") == string::npos)
             continue;
+        linha = iso_8859_1_to_utf8(linha);
         vector<string> valores = split(linha, ';');
         if (valores.size() < camposColunas.size()) {
             cerr << "Linha mal formatada: " << linha << endl;
@@ -130,6 +131,7 @@ void processarArquivoVotacao(const string &filename) {
     while (getline(file, linha)) {
         if (linha.find_first_not_of(" \t\n\r") == string::npos)
             continue;
+        linha = iso_8859_1_to_utf8(linha);
         vector<string> valores = split(linha, ';');
         int cdCargo = 0, cdMunicipio = 0, nrVotavel = 0, qtVotos = 0;
         for (size_t i = 0; i < valores.size(); i++) {
@@ -181,7 +183,13 @@ int main(int argc, char* argv[]){
         string arquivoVotacao = argv[3];
         tm dataEleicao = parseDate(argv[4]);
         Eleicao::instance().setDataEleicao(dataEleicao);
-        
+        try {
+            // Configura o locale global para pt_BR.UTF-8
+            locale::global(locale("pt_BR.UTF-8"));
+            cout.imbue(locale()); // Aplica o locale global ao cout
+        } catch (const runtime_error& e) {
+            cerr << "Locale pt_BR.UTF-8 não disponível. Usando locale padrão." << endl;
+        }
         processarArquivoConsulta(arquivoConsulta);
         processarArquivoVotacao(arquivoVotacao);
         

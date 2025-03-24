@@ -8,6 +8,8 @@
 #include <numeric>
 #include <ctime>
 
+using namespace std;
+
 // Função auxiliar para calcular a porcentagem
 static double calculatePercentage(int count, int total) {
     return (total == 0) ? 0.0 : static_cast<double>(count) / total;
@@ -56,6 +58,7 @@ void Relatorios::GeraRelatorio3() {
 
 void Relatorios::GeraRelatorio4() {
     cout << "\nTeriam sido eleitos se a votação fosse majoritária, e não foram eleitos:" << endl;
+    cout << "(com sua posição no ranking de mais votados)" << endl;
     vector<Candidato*> candidatos;
     for (auto &pair : Eleicao::instance().getCandidatos()) {
         Candidato* c = pair.second;
@@ -72,6 +75,7 @@ void Relatorios::GeraRelatorio4() {
 
 void Relatorios::GeraRelatorio5() {
     cout << "\nEleitos, que se beneficiaram do sistema proporcional:" << endl;
+    cout << "(com sua posição no ranking de mais votados)" << endl;
     vector<Candidato*> candidatos;
     for (auto &pair : Eleicao::instance().getCandidatos()) {
         Candidato* c = pair.second;
@@ -103,9 +107,27 @@ void Relatorios::GeraRelatorio6() {
         }
         int totalVotos = votosNominais + p->getVotosLegenda();
         cout << (i + 1) << " - " << p->getSigla() << " - " << p->getNumero() 
-                  << ",  " << totalVotos << " votos (" << votosNominais 
-                  << " nominais e " << p->getVotosLegenda() 
-                  << " de legenda), " << eleitos << " candidato(s) eleito(s)" << endl;
+             << ", " << totalVotos;
+        
+        if (totalVotos <= 1) {
+            cout << " voto (" << votosNominais;
+        } else {
+            cout << " votos (" << votosNominais;
+        }
+        
+        if (votosNominais <= 1) {
+            cout << " nominal e ";
+        } else {
+            cout << " nominais e ";
+        }
+        
+        cout << p->getVotosLegenda() << " de legenda), " << eleitos;
+        
+        if (eleitos <= 1) {
+            cout << " candidato eleito" << endl;
+        } else {
+            cout << " candidatos eleitos" << endl;
+        }
     }
 }
 
@@ -139,8 +161,19 @@ void Relatorios::GeraRelatorio7() {
             Candidato* ultimo = candidatos.back();
             cout << i << " - " << p->getSigla() << " - " << primeiro->getNR_PARTIDO() 
                       << ", " << primeiro->getNM_URNA_CANDIDATO() << " (" << primeiro->getNR_CANDIDATO() 
-                      << ", " << primeiro->getVotos() << " votos) / " << ultimo->getNM_URNA_CANDIDATO() 
-                      << " (" << ultimo->getNR_CANDIDATO() << ", " << ultimo->getVotos() << " votos)" << endl;
+                      << ", " << primeiro->getVotos(); 
+                    if (primeiro->getVotos() <= 1) {
+                        cout << " voto) / ";
+                    } else {
+                        cout << " votos) / ";
+                    }
+                    cout << ultimo->getNM_URNA_CANDIDATO() 
+                      << " (" << ultimo->getNR_CANDIDATO() << ", " << ultimo->getVotos();
+                      if (ultimo->getVotos() <= 1) {
+                        cout << " voto)" << endl;
+                    } else {
+                        cout << " votos)" << endl;
+                    }
         }
     }
 }
@@ -183,9 +216,9 @@ void Relatorios::GeraRelatorio9() {
         Candidato* c = pair.second;
         if (c->ehEleito() && c->getSG_UE() == Eleicao::instance().getMunicipio()) {
             if (c->getCD_GENERO())
-                feminino++;
-            else
                 masculino++;
+            else
+                feminino++;
         }
     }
     int vagas = Eleicao::instance().getVagas();
@@ -215,7 +248,7 @@ void Relatorios::GeraRelatorio10() {
               << calculatePercentage(totalVotosLegenda, totalVotos) * 100 << "%)" << endl;
 }
 
-void Relatorios::geraTodosRelatorios() {
+void Relatorios::geraTodosRelatorios() {    
     GeraRelatorio1();
     GeraRelatorio2();
     GeraRelatorio3();
