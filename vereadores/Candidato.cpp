@@ -4,6 +4,7 @@
 #include <sstream>
 #include <ctime>
 #include <cstring>
+#include <algorithm>
 
 using namespace std;
 
@@ -54,39 +55,68 @@ static tm parseDate(const string &dateStr) {
 }
 
 void Candidato::setAtributo(const string &campo, const string &valor) {
-    if (valor.empty())
-        return;
+    if (valor.empty() || all_of(valor.begin(), valor.end(), [](char c) { return isspace(c); })) {
+        return; // Ignora valores nulos ou vazios
+    }
+
+    // Remove aspas
+    string valorLimpo = valor;
+    valorLimpo.erase(remove(valorLimpo.begin(), valorLimpo.end(), '\"'), valorLimpo.end());
+
     try {
-        if (campo == "SG_UE")
-            SG_UE = stoi(valor);
-        else if (campo == "CD_CARGO")
-            CD_CARGO = stoi(valor);
-        else if (campo == "NR_CANDIDATO")
-            NR_CANDIDATO = valor;
-        else if (campo == "NM_URNA_CANDIDATO")
-            NM_URNA_CANDIDATO = valor;
-        else if (campo == "NR_PARTIDO")
-            NR_PARTIDO = stoi(valor);
-        else if (campo == "SG_PARTIDO")
-            SG_PARTIDO = valor;
-        else if (campo == "NR_FEDERACAO")
-            NR_FEDERACAO = stoi(valor);
-        else if (campo == "DT_NASCIMENTO")
-            DT_NASCIMENTO = parseDate(valor);
-        else if (campo == "CD_GENERO")
-            CD_GENERO = (valor == "2"); // 2 = Feminino
+        if (campo == "SG_UE") {
+            SG_UE = stoi(valorLimpo);
+        }
+        else if (campo == "CD_CARGO") {
+            CD_CARGO = stoi(valorLimpo);
+        }
+        else if (campo == "NR_CANDIDATO") {
+            NR_CANDIDATO = valorLimpo;
+        }
+        else if (campo == "NM_URNA_CANDIDATO") {
+            NM_URNA_CANDIDATO = valorLimpo;
+        }
+        else if (campo == "NR_PARTIDO") {
+            NR_PARTIDO = stoi(valorLimpo);
+        }
+        else if (campo == "SG_PARTIDO") {
+            SG_PARTIDO = valorLimpo;
+        }
+        else if (campo == "NR_FEDERACAO") {
+            NR_FEDERACAO = stoi(valorLimpo);
+        }
+        else if (campo == "DT_NASCIMENTO") {
+            // Formato esperado: "DD/MM/AAAA"
+            if (valorLimpo.length() == 10 && valorLimpo[2] == '/' && valorLimpo[5] == '/') {
+                int dia = stoi(valorLimpo.substr(0, 2));
+                int mes = stoi(valorLimpo.substr(3, 2));
+                int ano = stoi(valorLimpo.substr(6, 4));
+                
+                // Preencher a estrutura tm
+                memset(&DT_NASCIMENTO, 0, sizeof(tm));
+                DT_NASCIMENTO.tm_mday = dia;
+                DT_NASCIMENTO.tm_mon = mes - 1;  // tm_mon é 0-11
+                DT_NASCIMENTO.tm_year = ano - 1900;  // tm_year é anos desde 1900
+            } else {
+                throw invalid_argument("Formato de data inválido: " + valorLimpo);
+            }
+        }
+        else if (campo == "CD_GENERO") {
+            CD_GENERO = (valorLimpo == "2"); // 2 = Feminino (true), outros = Masculino (false)
+        }
         else if (campo == "CD_SIT_TOT_TURNO") {
-            if (valor == "2" || valor == "3")
+            if (valorLimpo == "2" || valorLimpo == "3")
                 situacaoTurno = CD_SIT_TOT_TURNO::ELEITO;
-            else if (valor == "-1")
+            else if (valorLimpo == "-1")
                 situacaoTurno = CD_SIT_TOT_TURNO::INVALIDO;
             else
                 situacaoTurno = CD_SIT_TOT_TURNO::NAO_ELEITO;
         }
-        else
+        else {
             throw invalid_argument("Coluna desconhecida: " + campo);
+        }
     } catch (const exception &e) {
-        throw invalid_argument("Erro ao processar o campo " + campo + " com valor " + valor + ": " + e.what());
+        throw invalid_argument("Erro ao processar o campo " + campo + " com valor \"" + valorLimpo + "\": " + e.what());
     }
 }
 
