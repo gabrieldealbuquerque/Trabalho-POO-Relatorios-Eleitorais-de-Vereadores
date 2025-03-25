@@ -21,6 +21,7 @@ private:
     Eleicao();
 public:
     static Eleicao& instance();
+    ~Eleicao(); // destrutor para liberar memória alocada
     Eleicao(const Eleicao&) = delete;
     Eleicao& operator=(const Eleicao&) = delete;
     
@@ -40,6 +41,8 @@ public:
     Candidato* getCandidatoPorNumero(int numeroCandidato);
     Partido* getPartidoPorNumero(int numero);
     void imprimeCandidatos() const;
+
+    bool candidatoValido(Candidato* candidato, const Eleicao& eleicao) const;
 };
 
 #endif // ELEICAO_HPP

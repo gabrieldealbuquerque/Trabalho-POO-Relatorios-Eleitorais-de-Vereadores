@@ -78,7 +78,7 @@ void processarArquivoConsulta(const string &filename) {
     while (getline(file, linha)) {
         if (linha.find_first_not_of(" \t\n\r") == string::npos)
             continue;
-        linha = iso_8859_1_to_utf8(linha);
+        //linha = iso_8859_1_to_utf8(linha);
         vector<string> valores = split(linha, ';');
         if (valores.size() < camposColunas.size()) {
             cerr << "Linha mal formatada: " << linha << endl;
@@ -99,9 +99,14 @@ void processarArquivoConsulta(const string &filename) {
                 }
             }
         }
-        Eleicao::instance().criaCandidato(candidato);
-        if (candidato->ehEleito()) {
-            Eleicao::instance().aumentaVagas(candidato);
+
+        if (Eleicao::instance().candidatoValido(candidato, Eleicao::instance())) {
+            Eleicao::instance().criaCandidato(candidato);
+            if (candidato->ehEleito()) {
+                Eleicao::instance().aumentaVagas(candidato);
+            }
+        } else {
+            delete candidato; // Libera memória se o candidato for inválido
         }
     }
 }
@@ -131,7 +136,7 @@ void processarArquivoVotacao(const string &filename) {
     while (getline(file, linha)) {
         if (linha.find_first_not_of(" \t\n\r") == string::npos)
             continue;
-        linha = iso_8859_1_to_utf8(linha);
+        //linha = iso_8859_1_to_utf8(linha);
         vector<string> valores = split(linha, ';');
         int cdCargo = 0, cdMunicipio = 0, nrVotavel = 0, qtVotos = 0;
         for (size_t i = 0; i < valores.size(); i++) {
@@ -195,6 +200,11 @@ int main(int argc, char* argv[]){
         
         Relatorios rel;
         rel.geraTodosRelatorios();
+        Eleicao::instance().~Eleicao();
+        locale::global(locale("C"));
+        cout.imbue(locale("C")); // para evitar do valgrid apontar memory leak
+
+
     } catch (const exception &e) {
         cerr << "Erro: " << e.what() << endl;
         return 1;

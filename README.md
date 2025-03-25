@@ -9,6 +9,8 @@ O programa foi exaustivamente testado e não foi encontrado bugs.
 ```bash
 ./test.sh vereadores > teste.log
 ```
+valgrind --leak-check=full --show-leak-kinds=all ./vereadores 57053 candidatos.csv votacao.csv 06/10/2024
+
 > **O que será compactado e enviado está mo diretorio vereadores**
 ```bash
 cd vereadores/

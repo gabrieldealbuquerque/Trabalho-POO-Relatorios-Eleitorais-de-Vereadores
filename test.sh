@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Redireciona toda a saída (stdout e stderr) para um arquivo de log
+LOG_FILE="test_output.log"
+exec > "$LOG_FILE" 2>&1
+
 # Constant definitions.
 TEMP_DIR=/tmp
 TEST_DIR=testes
@@ -40,7 +44,7 @@ test() {
 				cp -f $TEST_DIR/$subdir/$SUBDIR_INPUT/* $srcdir/
 				
 				# Runs the test.
-				$TEST_DIR/$subdir/$TEST_SCRIPT "$subdir" "$dir" "$srcdir" "$TEMP_DIR" "$BASE_DIR" "$TEST_DIR/$subdir" "$SUBDIR_INPUT" "$SUBDIR_OUTPUT" "diff -d --color=auto -y --strip-trailing-cr --suppress-common-lines --ignore-all-space --ignore-blank-lines -W 200"
+				valgrind --leak-check=full --show-leak-kinds=all $TEST_DIR/$subdir/$TEST_SCRIPT "$subdir" "$dir" "$srcdir" "$TEMP_DIR" "$BASE_DIR" "$TEST_DIR/$subdir" "$SUBDIR_INPUT" "$SUBDIR_OUTPUT" "diff -d --color=auto -y --strip-trailing-cr --suppress-common-lines --ignore-all-space --ignore-blank-lines -W 200"
 				
 				# Cleanup (removes all input files).
 				cd $srcdir

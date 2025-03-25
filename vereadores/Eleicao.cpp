@@ -15,6 +15,20 @@ Eleicao& Eleicao::instance() {
     return instance;
 }
 
+Eleicao::~Eleicao() {
+    // Liberar memória dos candidatos
+    for (auto& pair : candidatos) {
+        delete pair.second; // Deleta cada Candidato*
+    }
+    candidatos.clear(); // Limpa o map
+
+    // Liberar memória dos partidos
+    for (auto partido : partidos) {
+        delete partido; // Deleta cada Partido*
+    }
+    partidos.clear(); // Limpa o set
+}
+
 int Eleicao::getMunicipio() const { return municipio; }
 void Eleicao::setMunicipio(int m) { municipio = m; }
 int Eleicao::getVagas() const { return vagas; }
@@ -34,7 +48,7 @@ void Eleicao::criaPartido(Partido* novoPartido) {
     partidos.insert(novoPartido);
 }
 
-static bool candidatoValido(Candidato* candidato, const Eleicao &eleicao) {
+bool Eleicao::candidatoValido(Candidato* candidato, const Eleicao &eleicao) const {
     return candidato->ehVereador() &&
            !candidato->candidaturaInvalida() &&
            candidato->getSG_UE() == eleicao.getMunicipio() &&

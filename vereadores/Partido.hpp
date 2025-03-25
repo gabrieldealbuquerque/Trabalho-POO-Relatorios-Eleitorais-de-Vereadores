@@ -15,6 +15,7 @@ private:
     int votosLegenda;
 public:
     Partido(const string &sigla, int numero);
+    ~Partido();
     const set<Candidato*>& getCandidatos() const;
     void insereCandidato(Candidato* candidato);
     int getNumero() const;
