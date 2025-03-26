@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Redireciona toda a saída (stdout e stderr) para um arquivo de log
+LOG_FILE="test_output.log"
+exec > "$LOG_FILE" 2>&1
+
 # Constant definitions.
 TEMP_DIR=/tmp
 TEST_DIR=testes

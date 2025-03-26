@@ -1,3 +1,8 @@
+/**
+ * @author: João Henrique
+ * @author: Gabriel de Albuquerque
+ */
+
 #ifndef ELEICAO_HPP
 #define ELEICAO_HPP
 
@@ -22,6 +27,7 @@ private:
 public:
     static Eleicao& instance();
     Eleicao(const Eleicao&) = delete;
+    ~Eleicao();
     Eleicao& operator=(const Eleicao&) = delete;
     
     // Getters e setters
@@ -34,12 +40,13 @@ public:
     const map<int, Candidato*>& getCandidatos() const;
     const set<Partido*>& getPartidos() const;
     
-    void criaCandidato(Candidato* novoCandidato);
+    bool criaCandidato(Candidato* novoCandidato);
     void criaPartido(Partido* novoPartido);
     void processaVoto(int numeroCandidato, int votos);
     Candidato* getCandidatoPorNumero(int numeroCandidato);
     Partido* getPartidoPorNumero(int numero);
     void imprimeCandidatos() const;
+    bool candidatoValido(Candidato* candidato) const;
 };
 
 #endif // ELEICAO_HPP

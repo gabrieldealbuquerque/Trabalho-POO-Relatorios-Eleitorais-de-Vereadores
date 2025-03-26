@@ -1,3 +1,7 @@
+/**
+ * @author: João Henrique
+ * @author: Gabriel de Albuquerque
+ */
 #include "Candidato.hpp"
 #include <stdexcept>
 #include <iomanip>

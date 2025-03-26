@@ -1,3 +1,8 @@
+/**
+ * @author: João Henrique
+ * @author: Gabriel de Albuquerque
+ */
+
 #ifndef CANDIDATO_HPP
 #define CANDIDATO_HPP
 

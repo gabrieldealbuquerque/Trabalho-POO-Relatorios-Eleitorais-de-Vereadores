@@ -1,3 +1,8 @@
+/**
+ * @author: João Henrique
+ * @author: Gabriel de Albuquerque
+ */
+
 #ifndef PARTIDO_HPP
 #define PARTIDO_HPP
 
@@ -15,6 +20,7 @@ private:
     int votosLegenda;
 public:
     Partido(const string &sigla, int numero);
+    ~Partido();
     const set<Candidato*>& getCandidatos() const;
     void insereCandidato(Candidato* candidato);
     int getNumero() const;

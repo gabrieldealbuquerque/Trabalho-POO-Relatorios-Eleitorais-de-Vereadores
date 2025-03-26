@@ -21,7 +21,7 @@ FONTES = $(wildcard *.cpp)
 OBJETOS = $(FONTES:.cpp=.o)
 
 # nome do arquivo executável
-EXECUTAVEL = deputados
+EXECUTAVEL = vereadores
 
 ############ alvos
 #
@@ -42,7 +42,7 @@ $(EXECUTAVEL): $(OBJETOS)
 
 # comandos para execução	
 run: $(EXECUTAVEL)
-	@valgrind ./$(EXECUTAVEL) $(CDMUN) candidatos.csv votacao.csv 06/10/2024
+	@./$(EXECUTAVEL) $(CDMUN) candidatos.csv votacao.csv 06/10/2024
 
 # comando para limpeza
 clean: 

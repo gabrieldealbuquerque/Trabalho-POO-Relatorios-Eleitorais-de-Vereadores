@@ -1,3 +1,8 @@
+/**
+ * @author: João Henrique
+ * @author: Gabriel de Albuquerque
+ */
+
 #ifndef RELATORIOS_HPP
 #define RELATORIOS_HPP
 

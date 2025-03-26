@@ -1,3 +1,8 @@
+/**
+ * @author: João Henrique
+ * @author: Gabriel de Albuquerque
+ */
+
 #include "Eleicao.hpp"
 #include "Candidato.hpp"
 #include "Relatorios.hpp"
@@ -99,9 +104,14 @@ void processarArquivoConsulta(const string &filename) {
                 }
             }
         }
-        Eleicao::instance().criaCandidato(candidato);
-        if (candidato->ehEleito()) {
-            Eleicao::instance().aumentaVagas(candidato);
+        if (Eleicao::instance().criaCandidato(candidato))
+        {
+            if (candidato->ehEleito()) {
+                Eleicao::instance().aumentaVagas(candidato);
+            }        
+        }
+        else {
+            delete candidato;
         }
     }
 }
@@ -195,6 +205,8 @@ int main(int argc, char* argv[]){
         
         Relatorios rel;
         rel.geraTodosRelatorios();
+        locale::global(locale("C"));
+        cout.imbue(locale()); // para evitar do valgrid apontar memory leak
     } catch (const exception &e) {
         cerr << "Erro: " << e.what() << endl;
         return 1;

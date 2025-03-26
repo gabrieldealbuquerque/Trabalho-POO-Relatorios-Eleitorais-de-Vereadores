@@ -1,3 +1,8 @@
+/**
+ * @author: João Henrique
+ * @author: Gabriel de Albuquerque
+ */
+
 #include "Relatorios.hpp"
 #include "Eleicao.hpp"
 #include <iostream>

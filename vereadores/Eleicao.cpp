@@ -1,3 +1,8 @@
+/**
+ * @author: João Henrique
+ * @author: Gabriel de Albuquerque
+ */
+
 #include "Eleicao.hpp"
 #include <iostream>
 #include <stdexcept>
@@ -13,6 +18,20 @@ Eleicao::Eleicao() : municipio(0), vagas(0) {
 Eleicao& Eleicao::instance() {
     static Eleicao instance;
     return instance;
+}
+
+Eleicao::~Eleicao() {
+    // Liberar memória dos candidatos
+    for (auto& pair : candidatos) {
+        delete pair.second; // Deleta cada Candidato*
+    }
+    candidatos.clear(); // Limpa o map
+
+    // Liberar memória dos partidos
+    for (auto partido : partidos) {
+        delete partido; // Deleta cada Partido*
+    }
+    partidos.clear(); // Limpa o set
 }
 
 int Eleicao::getMunicipio() const { return municipio; }
@@ -34,25 +53,29 @@ void Eleicao::criaPartido(Partido* novoPartido) {
     partidos.insert(novoPartido);
 }
 
-static bool candidatoValido(Candidato* candidato, const Eleicao &eleicao) {
+bool Eleicao::candidatoValido(Candidato* candidato) const {
     return candidato->ehVereador() &&
            !candidato->candidaturaInvalida() &&
-           candidato->getSG_UE() == eleicao.getMunicipio() &&
+           candidato->getSG_UE() == this->municipio &&
            !candidato->getNR_CANDIDATO().empty() &&
            !candidato->getNM_URNA_CANDIDATO().empty();
 }
 
-void Eleicao::criaCandidato(Candidato* novoCandidato) {
+bool Eleicao::criaCandidato(Candidato* novoCandidato) {
     Partido* p = getPartidoPorNumero(novoCandidato->getNR_PARTIDO());
     if (p == nullptr) {
         p = new Partido(novoCandidato->getSG_PARTIDO(), novoCandidato->getNR_PARTIDO());
         criaPartido(p);
     }
-    if (candidatoValido(novoCandidato, *this)) {
+    if (candidatoValido(novoCandidato)) {
         int num = stoi(novoCandidato->getNR_CANDIDATO());
-        candidatos[num] = novoCandidato;
-        p->insereCandidato(novoCandidato);
+        if (candidatos.find(num) == candidatos.end()) {
+            candidatos[num] = novoCandidato;
+            p->insereCandidato(novoCandidato);
+        }
+        return true;
     }
+    return false;
 }
 
 void Eleicao::processaVoto(int numeroCandidato, int votos) {

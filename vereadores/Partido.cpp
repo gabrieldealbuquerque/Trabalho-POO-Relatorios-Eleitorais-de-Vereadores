@@ -1,6 +1,15 @@
+/**
+ * @author: João Henrique
+ * @author: Gabriel de Albuquerque
+ */
+
 #include "Partido.hpp"
 
 Partido::Partido(const string &sigla, int numero) : sigla(sigla), numero(numero), votosLegenda(0) {}
+
+Partido::~Partido() {
+    candidatos.clear(); // Limpa o set
+}
 
 const set<Candidato*>& Partido::getCandidatos() const { return candidatos; }
 
